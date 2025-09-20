@@ -1,283 +1,169 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <title>Raad de Leeftijd van de Acteur</title>
+  <meta charset="utf-8">
+  <title>Raad de leeftijd van de acteur</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    body {
+    body{
       font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 50px auto;
-      text-align: center;
-      background: #f4f4f4;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      max-width:720px;
+      margin:40px auto;
+      background:#f4f6f8;
+      padding:28px;
+      border-radius:12px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.08);
+      text-align:center;
     }
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-      margin-top: 10px;
+    h1{ margin-top:0; }
+    #vraag{ font-size:18px; margin:14px 0; }
+    input[type="number"]{
+      padding:10px; font-size:16px; width:140px; text-align:center; border-radius:6px; border:1px solid #ccc;
     }
-    #feedback {
-      font-weight: bold;
-      margin-top: 20px;
+    button{
+      padding:10px 14px; font-size:16px; margin:8px; border-radius:6px; cursor:pointer;
+      border:1px solid #2b7cff; background:linear-gradient(#3c8bff,#2b7cff); color:white;
     }
-    img {
-      max-width: 300px;
-      margin: 20px 0;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);
-    }
+    #feedback{ font-weight:700; margin-top:18px; min-height:28px; }
+    footer{ margin-top:22px; color:#666; font-size:13px; }
+    .small{ font-size:13px; color:#555; margin-top:6px; }
+    .controls{ margin-top:12px; }
   </style>
 </head>
 <body>
-  <h1>🎭 Raad de Leeftijd van de Acteur</h1>
-  <p id="vraag">Laden...</p>
-  <img id="foto" src="" alt="Personage Foto">
-  <br>
-  <input type="number" id="gok" placeholder="Bijv. 22">
-  <br>
-  <button onclick="controleerGok()">Controleer</button>
+  <h1>🎬 Raad de leeftijd van de acteur</h1>
+  <p class="small">Je ziet het personage en de (fictieve) leeftijd. Raad hoe oud de acteur/actrice écht was tijdens de opnames.</p>
+
+  <div id="vraag">Laden...</div>
+
+  <div>
+    <input id="gok" type="number" placeholder="Bijv. 22" />
+  </div>
+
+  <div class="controls">
+    <button id="controleerBtn">Controleer</button>
+    <button id="volgendeBtn">Volgende</button>
+    <button id="nieuwBtn">Nieuw spel (shuffle)</button>
+  </div>
+
   <p id="feedback"></p>
-  <button onclick="volgendeVraag()">Volgende Vraag</button>
+
+  <footer>Tip: gebruik <strong>Nieuw spel</strong> om opnieuw te schudden.</footer>
 
   <script>
-    const vragen = [
-      {
-        personage: "Cady Heron",
-        film: "Mean Girls",
-        personageLeeftijd: 15,
-        acteurLeeftijd: 18,
-        foto: "https://voorbeelduit/links/cady_heron.jpg"
-      },
-      {
-        personage: "Regina George",
-        film: "Mean Girls",
-        personageLeeftijd: 16,
-        acteurLeeftijd: 26,
-        foto: "https://voorbeelduit/links/regina_george.jpg"
-      },
-      {
-        personage: "Karen Smith",
-        film: "Mean Girls",
-        personageLeeftijd: 15,
-        acteurLeeftijd: 19,
-        foto: "https://voorbeelduit/links/karen_smith.jpg"
-      },
-      {
-        personage: "John Bender",
-        film: "The Breakfast Club",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 25,
-        foto: "https://voorbeelduit/links/john_bender.jpg"
-      },
-      {
-        personage: "Allison Reynolds",
-        film: "The Breakfast Club",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 23,
-        foto: "https://voorbeelduit/links/allison_reynolds.jpg"
-      },
-      {
-        personage: "Andrew Clark",
-        film: "The Breakfast Club",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 23,
-        foto: "https://voorbeelduit/links/andrew_clark.jpg"
-      },
-      {
-        personage: "Jake Ryan",
-        film: "Sixteen Candles",
-        personageLeeftijd: 18,
-        acteurLeeftijd: 23,
-        foto: "https://voorbeelduit/links/jake_ryan.jpg"
-      },
-      {
-        personage: "Samantha Baker",
-        film: "Sixteen Candles",
-        personageLeeftijd: 16,
-        acteurLeeftijd: 15,
-        foto: "https://voorbeelduit/links/samantha_baker.jpg"
-      },
-      {
-        personage: "Mike O'Donnell",
-        film: "17 Again",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 21,
-        foto: "https://voorbeelduit/links/mike_odonnell.jpg"
-      },
-      {
-        personage: "Maggie O'Donnell",
-        film: "17 Again",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 22,
-        foto: "https://voorbeelduit/links/maggie_odonnell.jpg"
-      },
-      {
-        personage: "Alex O'Donnell",
-        film: "17 Again",
-        personageLeeftijd: 15,
-        acteurLeeftijd: 19,
-        foto: "https://voorbeelduit/links/alex_odonnell.jpg"
-      },
-      {
-        personage: "Olive Penderghast",
-        film: "Easy A",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 21,
-        foto: "https://voorbeelduit/links/olive_penderghast.jpg"
-      },
-      {
-        personage: "Marianne",
-        film: "Easy A",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 24,
-        foto: "https://voorbeelduit/links/marianne.jpg"
-      },
-      {
-        personage: "Blair Waldorf",
-        film: "Gossip Girl S1",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 23,
-        foto: "https://voorbeelduit/links/blair_waldorf.jpg"
-      },
-      {
-        personage: "Serena van der Woodsen",
-        film: "Gossip Girl S1",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 21,
-        foto: "https://voorbeelduit/links/serena_van_der_woodsen.jpg"
-      },
-      {
-        personage: "Chuck Bass",
-        film: "Gossip Girl S1",
-        personageLeeftijd: 18,
-        acteurLeeftijd: 23,
-        foto: "https://voorbeelduit/links/chuck_bass.jpg"
-      },
-      {
-        personage: "Georgina Sparks",
-        film: "Gossip Girl S1",
-        personageLeeftijd: 18,
-        acteurLeeftijd: 22,
-        foto: "https://voorbeelduit/links/georgina_sparks.jpg"
-      },
-      {
-        personage: "Jenny Humphrey",
-        film: "Gossip Girl S1",
-        personageLeeftijd: 14,
-        acteurLeeftijd: 14,
-        foto: "https://voorbeelduit/links/jenny_humphrey.jpg"
-      },
-      {
-        personage: "Nate Archibald",
-        film: "Gossip Girl S1",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 22,
-        foto: "https://voorbeelduit/links/nate_archibald.jpg"
-      },
-      {
-        personage: "Dan Humphrey",
-        film: "Gossip Girl S1",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 20,
-        foto: "https://voorbeelduit/links/dan_humphrey.jpg"
-      },
-      {
-        personage: "Danny Zuko",
-        film: "Grease",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 24,
-        foto: "https://voorbeelduit/links/danny_zuko.jpg"
-      },
-      {
-        personage: "Sandy Olsson",
-        film: "Grease",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 29,
-        foto: "https://voorbeelduit/links/sandy_olsson.jpg"
-      },
-      {
-        personage: "Bella Swan",
-        film: "Twilight",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 17,
-        foto: "https://voorbeelduit/links/bella_swan.jpg"
-      },
-      {
-        personage: "Edward Cullen",
-        film: "Twilight",
-        personageLeeftijd: 108,
-        acteurLeeftijd: 21,
-        foto: "https://voorbeelduit/links/edward_cullen.jpg"
-      },
-      {
-        personage: "Jacob Black",
-        film: "Twilight",
-        personageLeeftijd: 15,
-        acteurLeeftijd: 15,
-        foto: "https://voorbeelduit/links/jacob_black.jpg"
-      },
-      {
-        personage: "Elle Evans",
-        film: "The Kissing Booth",
-        personageLeeftijd: 16,
-        acteurLeeftijd: 18,
-        foto: "https://voorbeelduit/links/elle_evans.jpg"
-      },
-      {
-        personage: "Noah Flynn",
-        film: "The Kissing Booth",
-        personageLeeftijd: 18,
-        acteurLeeftijd: 20,
-        foto: "https://voorbeelduit/links/noah_flynn.jpg"
-      },
-      {
-        personage: "Lee Flynn",
-        film: "The Kissing Booth",
-        personageLeeftijd: 17,
-        acteurLeeftijd: 21,
-        foto: "https://voorbeelduit/links/lee_flynn.jpg"
-      }
+    // GEGEVENS — zelf al door elkaar gezet
+    const vragenOrigineel = [
+      { personage: "Blair Waldorf", film: "Gossip Girl S1", personageLeeftijd: 17, acteurLeeftijd: 23 },
+      foto: https://share.google/7aOW1SYVJoj0fK50w 
+      { personage: "Jake Ryan", film: "Sixteen Candles", personageLeeftijd: 18, acteurLeeftijd: 23 },
+      foto: https://share.google/DoMBV7FXG91TAMLuY
+      { personage: "Regina George", film: "Mean Girls", personageLeeftijd: 16, acteurLeeftijd: 26 },
+      foto: https://share.google/NHcNxCDKrmt5f42WQ
+      { personage: "Edward Cullen", film: "Twilight", personageLeeftijd: 108, acteurLeeftijd: 21 },
+      foto: https://share.google/bmkXv4BAsPlzgHySt
+      { personage: "Mike O'Donnell", film: "17 Again", personageLeeftijd: 17, acteurLeeftijd: 21 },
+      foto: https://share.google/AuB5JSXhevLbnBwU9
+      { personage: "Danny Zuko", film: "Grease", personageLeeftijd: 17, acteurLeeftijd: 24 },
+      foto: https://share.google/sDqmEOkb18XATyDLl
+      { personage: "Jenny Humphrey", film: "Gossip Girl S1", personageLeeftijd: 14, acteurLeeftijd: 14 },
+      foto: https://share.google/NlAwT9umscTPOLgnY
+      { personage: "Karen Smith", film: "Mean Girls", personageLeeftijd: 15, acteurLeeftijd: 19 },
+      foto: https://share.google/yOraupiZArVfE9YVU
+      { personage: "Olive Penderghast", film: "Easy A", personageLeeftijd: 17, acteurLeeftijd: 21 },
+      foto: https://share.google/K7N5fRMpKi5t9kCeI
+      { personage: "John Bender", film: "The Breakfast Club", personageLeeftijd: 17, acteurLeeftijd: 25 },
+      foto: https://share.google/TnRF1abowzjHeMXUJ
+      { personage: "Elle Evans", film: "The Kissing Booth", personageLeeftijd: 16, acteurLeeftijd: 18 },
+      foto: https://share.google/VkQ7pAp8gfDkuXnmq
+      { personage: "Nate Archibald", film: "Gossip Girl S1", personageLeeftijd: 17, acteurLeeftijd: 22 },
+      foto: https://share.google/Fbt7bgUWn0a0ZZr0G
+      { personage: "Sandy Olsson", film: "Grease", personageLeeftijd: 17, acteurLeeftijd: 29 },
+      foto: https://share.google/L04noCUCH3Fw0FzTE
+      { personage: "Marianne", film: "Easy A", personageLeeftijd: 17, acteurLeeftijd: 24 },
+      foto: https://share.google/C2uYgfUbkoQKSZ2CG
+      { personage: "Cady Heron", film: "Mean Girls", personageLeeftijd: 15, acteurLeeftijd: 18 },
+      foto: https://share.google/u3Sn0U3Ifl547AhlF
+      { personage: "Lee Flynn", film: "The Kissing Booth", personageLeeftijd: 17, acteurLeeftijd: 21 },
+      foto: https://share.google/gvMOZ0MZFLKUgoPjp
+      { personage: "Samantha Baker", film: "Sixteen Candles", personageLeeftijd: 16, acteurLeeftijd: 15 },
+      foto: https://share.google/Zu1qgdar7V97q4jsX
+      { personage: "Georgina Sparks", film: "Gossip Girl S1", personageLeeftijd: 18, acteurLeeftijd: 22 },
+      foto: https://share.google/behUByIQzStvnNUCq
+      { personage: "Andrew Clark", film: "The Breakfast Club", personageLeeftijd: 17, acteurLeeftijd: 23 },
+      foto: https://share.google/Cw5wh3AGPdZJ5BlfO
+      { personage: "Jacob Black", film: "Twilight", personageLeeftijd: 15, acteurLeeftijd: 15 },
+      foto: https://share.google/UD8d7jKuRjiuLouln
+      { personage: "Alex O'Donnell", film: "17 Again", personageLeeftijd: 15, acteurLeeftijd: 19 },
+      foto: https://share.google/ccvlFZ5s9Ke7CUgDj
+      { personage: "Serena van der Woodsen", film: "Gossip Girl S1", personageLeeftijd: 17, acteurLeeftijd: 21 },
+      foto: https://share.google/SUufWwoAbkPfecrVq
+      { personage: "Allison Reynolds", film: "The Breakfast Club", personageLeeftijd: 17, acteurLeeftijd: 23 },
+      foto: https://share.google/17u5wvlMdOtjloNXq
+      { personage: "Noah Flynn", film: "The Kissing Booth", personageLeeftijd: 18, acteurLeeftijd: 20 },
+      foto: https://share.google/ccTC3qzQgYPMqXRU3
+      { personage: "Dan Humphrey", film: "Gossip Girl S1", personageLeeftijd: 17, acteurLeeftijd: 20 },
+      foto: https://share.google/UzLGLwt82juH4wN2w
+      { personage: "Bella Swan", film: "Twilight", personageLeeftijd: 17, acteurLeeftijd: 17 },
+      foto: https://share.google/iUZOxRJZ47s9p9aU9
+      { personage: "Maggie O'Donnell", film: "17 Again", personageLeeftijd: 17, acteurLeeftijd: 22 },
+      foto: https://share.google/XsgFe5tJBCXZm3cSA
+      { personage: "Chuck Bass", film: "Gossip Girl S1", personageLeeftijd: 18, acteurLeeftijd: 23 }
+      foto: https://share.google/9pvEygvlP8lYvxFx5
     ];
 
-    let huidigeIndex = 0;
+    let vragen = vragenOrigineel.slice();
+    let idx = 0;
 
-    function toonVraag() {
-      const vraag = vragen[huidigeIndex];
-      document.getElementById("vraag").textContent =
-        `${vraag.personage} is ${vraag.personageLeeftijd} jaar oud in "${vraag.film}". Hoe oud was de acteur/actrice tijdens de opnames?`;
-      document.getElementById("gok").value = "";
-      document.getElementById("feedback").textContent = "";
-      document.getElementById("foto").src = vraag.foto;
-      document.getElementById("foto").alt = vraag.personage;
+    const vraagEl = document.getElementById('vraag');
+    const gokEl = document.getElementById('gok');
+    const feedbackEl = document.getElementById('feedback');
+    const controleerBtn = document.getElementById('controleerBtn');
+    const volgendeBtn = document.getElementById('volgendeBtn');
+    const nieuwBtn = document.getElementById('nieuwBtn');
+
+    function toonVraag(){
+      const v = vragen[idx];
+      vraagEl.textContent = `${v.personage} (${v.film}) is ${v.personageLeeftijd} jaar. Hoe oud was de acteur/actrice tijdens de opnames?`;
+      gokEl.value = '';
+      feedbackEl.textContent = '';
     }
 
-    function controleerGok() {
-      const gok = parseInt(document.getElementById("gok").value);
-      const juisteAntwoord = vragen[huidigeIndex].acteurLeeftijd;
-      const verschil = Math.abs(gok - juisteAntwoord);
-      const feedback = document.getElementById("feedback");
-
-      if (isNaN(gok)) {
-        feedback.textContent = "❗ Vul een geldig getal in.";
+    function controleerGok(){
+      const gok = parseInt(gokEl.value,10);
+      if(isNaN(gok)){
+        feedbackEl.textContent = "❗ Vul een geldig getal in.";
         return;
       }
-
-      if (gok === juisteAntwoord) {
-        feedback.textContent = "✅ Klopt precies!";
+      const juist = vragen[idx].acteurLeeftijd;
+      if(gok === juist){
+        feedbackEl.textContent = "✅ Precies goed!";
       } else {
-        feedback.textContent = `❌ Fout! Het juiste antwoord is ${juisteAntwoord}. Je zat er ${verschil} jaar naast.`;
+        const verschil = Math.abs(gok - juist);
+        feedbackEl.textContent = `❌ Fout! Het juiste antwoord is ${juist}. Je zat er ${verschil} jaar naast.`;
       }
     }
 
-    function volgendeVraag() {
-      huidigeIndex = (huidigeIndex + 1) % vragen.length;
-      toonVraag();
+    function volgende(){
+      idx++;
+      if(idx >= vragen.length){
+        feedbackEl.textContent = "🎉 Je bent klaar! Klik op 'Nieuw spel' om opnieuw te beginnen.";
+        idx = vragen.length-1;
+      } else {
+        toonVraag();
+      }
     }
 
-    // Startspel
+    function nieuwSpel(){
+      vragen = vragenOrigineel.slice();
+      idx = 0;
+      toonVraag();
+      feedbackEl.textContent = "🔀 Nieuw spel gestart.";
+    }
+
+    controleerBtn.addEventListener('click', controleerGok);
+    volgendeBtn.addEventListener('click', volgende);
+    nieuwBtn.addEventListener('click', nieuwSpel);
+
     toonVraag();
   </script>
 </body>
