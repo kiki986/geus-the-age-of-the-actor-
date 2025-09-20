@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -7,14 +5,15 @@
   <title>Leeftijd Quiz</title>
   <style>
     body { font-family: Arial, sans-serif; text-align: center; background: #f0f0f0; }
-    #quiz { margin: 20px auto; padding: 20px; background: white; border-radius: 10px; width: 350px; }
+    #quiz { margin: 20px auto; padding: 20px; background: white; border-radius: 10px; width: 400px; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
     img { max-width: 250px; border-radius: 8px; margin: 10px 0; }
     input { padding: 8px; font-size: 16px; width: 100px; text-align: center; }
     button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+    #feedback { font-weight: bold; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <h1>Filmquiz: Leeftijd van de acteurs</h1>
+  <h1>🎬 Raad de echte leeftijd!</h1>
   <div id="quiz">
     <p id="vraag"></p>
     <img id="foto" src="" alt="Acteur / Personage">
@@ -30,12 +29,46 @@
       { naam: "Cady Heron (Mean Girls)", speelt: 15, echt: 18, foto: "https://static.wikia.nocookie.net/viacom4633/images/5/58/Mean_Girls_Cady_Heron.png/revision/latest?cb=20240926055143" },
       { naam: "Regina George (Mean Girls)", speelt: 16, echt: 26, foto: "https://i.pinimg.com/736x/e7/57/98/e75798a792640373875beb7556166e89.jpg" },
       { naam: "Karen Smith (Mean Girls)", speelt: 15, echt: 19, foto: "https://i.pinimg.com/736x/8f/e0/29/8fe029a29c600742446a86b1fd274211.jpg" },
+      { naam: "John Bender (The Breakfast Club)", speelt: 17, echt: 25, foto: "https://i.pinimg.com/736x/90/b0/0d/90b00d51b890c34be2ea3c9123db15b3.jpg" },
+      { naam: "Allison Reynolds (The Breakfast Club)", speelt: 17, echt: 23, foto: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhBRC_keWcu3NMS2e7qPNR5wcEbdmnd9e6yO0zLeRtmZgMsYkqZi19ENmU6cnu1XmGwm8tduhxUdOoYwRivdMq9LeoiytHxNIXcPKM81d2zB-pPO55YtLxF8IWaBNy-ryzFvrm-ELsbleI/s1600/images+%252810%2529.jpeg" },
+      { naam: "Andrew Clark (The Breakfast Club)", speelt: 17, echt: 23, foto: "https://static.wikia.nocookie.net/p__/images/8/8e/AndrewClark.jpg/revision/latest?cb=20120203205148&path-prefix=protagonist" },
       { naam: "Jake Ryan (Sixteen Candles)", speelt: 18, echt: 23, foto: "https://people.com/thmb/jrOGckx2kKjRHrc5Qi5o26b8X1Y=/4000x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(666x0:668x2)/Michael-Schoeffling-16-candles-050224-7d5f491664394c85a08720d2351cc44b.jpg" },
-      { naam: "Allison Reynolds (The Breakfast Club)", speelt: 17, echt: 23, foto: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhBRC_keWcu3NMS2e7qPNR5wcEbdmnd9e6yO0zLeRtmZgMsYkqZi19ENmU6cnu1XmGwm8tduhxUdOoYwRivdMq9LeoiytHxNIXcPKM81d2zB-pPO55YtLxF8IWaBNy-ryzFvrm-ELsbleI/s1600/images+%252810%2529.jpeg" }
-      // ➝ hier kun je de rest van de personages laten staan zoals in de vorige versie
+      { naam: "Samantha Baker (Sixteen Candles)", speelt: 16, echt: 15, foto: "https://i.pinimg.com/736x/24/1a/05/241a050d8c1afd2624af4bd66a9ea2a9.jpg" },
+      { naam: "Mike O'Donnell (17 Again)", speelt: 17, echt: 21, foto: "https://miro.medium.com/v2/resize:fit:1126/format:webp/1*0x6rVasQSEfrxiXfKA5KoA.jpeg" },
+      { naam: "Maggie O'Donnell (17 Again)", speelt: 18, echt: 22, foto: "https://foreveryoungadult.com/wp-content/uploads/2021/12/HSA-17-Again-michelle-trachtenberg.jpg" },
+      { naam: "Alex O'Donnell (17 Again)", speelt: 16, echt: 19, foto: "https://i.pinimg.com/736x/41/c3/da/41c3da8d87acd42b5fce534db9883137.jpg" },
+      { naam: "Olive Penderghast (Easy A)", speelt: 17, echt: 21, foto: "https://substackcdn.com/image/fetch/$s_!ze7t!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Ff0bd4416-963a-42d1-b8e7-e936e94f388b_802x534.png" },
+      { naam: "Marianne (Easy A)", speelt: 17, echt: 24, foto: "https://static.wikia.nocookie.net/easya/images/6/6a/Marianne_bryant.jpg/revision/latest?cb=20110518030615" },
+      { naam: "Blair Waldorf (Gossip Girl)", speelt: 17, echt: 23, foto: "https://i.pinimg.com/1200x/d2/70/60/d27060f1c935d1cf2e222e6d7daddbcf.jpg" },
+      { naam: "Serena van der Woodsen (Gossip Girl)", speelt: 17, echt: 21, foto: "https://s1.r29static.com/bin/entry/046/1440x1729/1771006/image.png" },
+      { naam: "Chuck Bass (Gossip Girl)", speelt: 18, echt: 23, foto: "https://i.namu.wiki/i/6vpTssn7tVIELa666_A_0pCPY7RWRidCNl-0OTnUIZkeMmoEI25d_Saltb1gzxqePGmeY8z1bf3_HUDyPIdQeKsO442ytZ937fByl17R5YI-P-CaNYkqXN3DQv5uBx4wg3YKJu1lBZcUT_61srPWzw.webp" },
+      { naam: "Georgina Sparks (Gossip Girl)", speelt: 19, echt: 22, foto: "https://i.pinimg.com/736x/3d/50/07/3d50071356254f43e1f5bfcbba19fd45.jpg" },
+      { naam: "Jenny Humphrey (Gossip Girl)", speelt: 14, echt: 14, foto: "https://i.pinimg.com/736x/83/33/7a/83337a41315b610ee634d6eeb4a6dc2d.jpg" },
+      { naam: "Nate Archibald (Gossip Girl)", speelt: 17, echt: 22, foto: "https://static.wikia.nocookie.net/gossip-girl-xx/images/0/0e/Nate_Archibald.jpg/revision/latest?cb=20160721135805" },
+      { naam: "Dan Humphrey (Gossip Girl)", speelt: 17, echt: 20, foto: "https://i.pinimg.com/736x/28/4b/1a/284b1a1ce752e1ddf826737d88714694.jpg" },
+      { naam: "Danny Zuko (Grease)", speelt: 17, echt: 24, foto: "https://i.pinimg.com/736x/0e/db/47/0edb47aa90dea844f76f8c61d3e8f1c3.jpg" },
+      { naam: "Sandy Olsson (Grease)", speelt: 17, echt: 29, foto: "https://static.wikia.nocookie.net/grease/images/3/37/Sandy-grease-2.jpeg/revision/latest?cb=20121226055242" },
+      { naam: "Bella Swan (Twilight)", speelt: 17, echt: 17, foto: "https://i.pinimg.com/1200x/d2/3b/f4/d23bf4cc12323c2257e6961b74cc74fd.jpg" },
+      { naam: "Edward Cullen (Twilight)", speelt: 108, echt: 21, foto: "https://i.pinimg.com/736x/d7/80/25/d78025a21b72aba6c020d4373ffea3d8.jpg" },
+      { naam: "Jacob Black (Twilight)", speelt: 15, echt: 15, foto: "https://i.pinimg.com/736x/c6/7b/8a/c67b8a5dd8241eb6e3578bb4055a38ed.jpg" },
+      { naam: "Elle Evans (The Kissing Booth)", speelt: 16, echt: 18, foto: "https://assets.capitalfm.com/2020/30/the-kissing-booth-cast-ages-1595931273-view-0.jpg" },
+      { naam: "Noah Flynn (The Kissing Booth)", speelt: 18, echt: 20, foto: "https://static.wikia.nocookie.net/thebreakfastclub/images/b/b7/Images.jpg/revision/latest?cb=20170825104346" },
+      { naam: "Lee Flynn (The Kissing Booth)", speelt: 17, echt: 21, foto: "https://static.wikia.nocookie.net/the-kissing-booth/images/5/59/Lee_Flynn.jpg/revision/latest?cb=20200728060909" }
     ];
 
     let huidigeVraag = 0;
+
+    // shuffle functie
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // schud alle vragen door elkaar
+    shuffle(vragen);
 
     function toonVraag() {
       const vraag = vragen[huidigeVraag];
