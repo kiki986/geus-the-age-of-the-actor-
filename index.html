@@ -2,25 +2,21 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <title>the age of actors</title>
+  <title>Guess the age of the actor!</title>
   <style>
     body { font-family: Arial, sans-serif; text-align: center; background: #f0f0f0; }
-    #quiz { margin: 20px auto; padding: 20px; background: pink; border-radius: 10px; width: 400px; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
+    #quiz { margin: 20px auto; padding: 20px; background: pink; border-radius: 10px; width: 450px; box-shadow: 0 0 10px rgba(0,0,0,0.2); }
     img { max-width: 250px; border-radius: 8px; margin: 10px 0; }
-    input { padding: 8px; font-size: 16px; width: 100px; text-align: center; }
-    button { margin: 10px; padding: 10px 20px; font-size: 16px; }
-    #feedback { font-weight: bold; margin-top: 10px; }
+    button { margin: 5px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    #feedback { font-weight: bold; margin-top: 10px; font-size: 18px; }
   </style>
 </head>
 <body>
-  <h1>geus the age of the actor!</h1>
+  <h1>Guess the age of the actor!</h1>
   <div id="quiz">
     <p id="vraag"></p>
     <img id="foto" src="" alt="Acteur / Personage">
-    <div>
-      <input type="number" id="" placeholder="Leeftijd">
-      <button onclick="controleer()">Controleer</button>
-    </div>
+    <div id="opties"></div>
     <p id="feedback"></p>
   </div>
 
@@ -52,12 +48,11 @@
       { naam: "Taylor Lautner personage Jacob Black (Twilight)", speelt: 15, echt: 15, foto: "https://i.pinimg.com/736x/3d/50/07/3d50071356254f43e1f5bfcbba19fd45.jpg" },
       { naam: "Joey King, personage Elle Evans (The Kissing Booth)", speelt: 16, echt: 18, foto: "https://assets.capitalfm.com/2020/30/the-kissing-booth-cast-ages-1595931273-view-0.jpg" },
       { naam: "Jacob Elordi personage Noah Flynn (The Kissing Booth)", speelt: 18, echt: 20, foto: "https://i.pinimg.com/1200x/d2/3b/f4/d23bf4cc12323c2257e6961b74cc74fd.jpg" },
-      { naam: "Joel Courtney personage Lee Flynn (The Kissing Booth)", speelt: 17, echt: 21, foto: "https://static.wikia.nocookie.net/the-kissing-booth/images/5/59/Lee_Flynn.jpg/revision/latest?cb=20200728060909" }
+      { naam: "Joel Courtney personage Lee Flynn (The Kissing Booth)", speelt: 17, echt: 21, foto: "https://static.wikia.nocookie.net/p__/images/5/59/Lee_Flynn.jpg/revision/latest?cb=20200728060909" }
     ];
 
     let huidigeVraag = 0;
 
-    // shuffle functie
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -66,7 +61,6 @@
       return array;
     }
 
-    // schud alle vragen door elkaar
     shuffle(vragen);
 
     function toonVraag() {
@@ -74,18 +68,33 @@
       document.getElementById("vraag").textContent =
         `${vraag.naam}: speelt ${vraag.speelt}, wat is de echte leeftijd?`;
       document.getElementById("foto").src = vraag.foto;
-      document.getElementById("invoer").value = "";
       document.getElementById("feedback").textContent = "";
+
+      // Genereer multiple choice opties (juiste + 3 random)
+      const opties = [vraag.echt];
+      while (opties.length < 4) {
+        let randomLeeftijd = Math.floor(Math.random() * 20 + 14);
+        if (!opties.includes(randomLeeftijd)) opties.push(randomLeeftijd);
+      }
+      shuffle(opties);
+
+      const letters = ["A", "B", "C", "D"];
+      const optiesDiv = document.getElementById("opties");
+      optiesDiv.innerHTML = "";
+      opties.forEach((optie, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = `${letters[index]}) ${optie}`;
+        btn.onclick = () => controleer(optie);
+        optiesDiv.appendChild(btn);
+      });
     }
 
-    function controleer() {
+    function controleer(gekozen) {
       const vraag = vragen[huidigeVraag];
-      const invoer = parseInt(document.getElementById("invoer").value);
-      if (multiple choice === vraag.echt) {
+      if (gekozen === vraag.echt) {
         document.getElementById("feedback").textContent = "✅ Goed!";
-      } else 
-        document.getElementById("feedback").textContent =
-          `❌ Fout! Het juiste antwoord is ${vraag.echt}.`;
+      } else {
+        document.getElementById("feedback").textContent = `❌ Fout! Het juiste antwoord is ${vraag.echt}.`;
       }
       huidigeVraag = (huidigeVraag + 1) % vragen.length;
       setTimeout(toonVraag, 2000);
